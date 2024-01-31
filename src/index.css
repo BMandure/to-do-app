@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .note-clip {
+    clip-path: polygon(85% 0, 100% 15%, 100% 100%, 0 100%, 0 0);
+  }
+  .triangle-clip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 37px;
+    height: 37px;
+    clip-path: polygon(0 0, 0% 100%, 100% 100%);
+  }
+}
