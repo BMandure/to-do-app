@@ -15,7 +15,7 @@ function App() {
   const testInfo = {
     name: "This is a Title",
     content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima.",
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima.",
     tags: ["Tag 1", "Tag 2", "Tag 3"],
   };
 
@@ -30,7 +30,7 @@ function App() {
 
   const notes = [];
   for (let i = 0; i < 25; i++) {
-    notes.push(<Note key={i} info={info} />);
+    notes.push(<Note key={i} info={info} isLight={isLight} />);
   }
 
   return (
