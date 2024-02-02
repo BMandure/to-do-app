@@ -5,7 +5,6 @@ function Tag(props: {
 }) {
   const handlerOnDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("Delete Tag");
 
     const removeTag = () => props.tags.filter((tag) => tag !== props.text);
 

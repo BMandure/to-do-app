@@ -1,33 +1,48 @@
 import React, { useState } from "react";
+import { NoteInfo } from "../../types";
 import Modal from "react-bootstrap/Modal";
 import editIcon from "../assets/editIcon.svg";
 import TagContainer from "./TagContainer";
 
-function EditModal(props: { isLight: boolean }) {
+function EditModal(props: {
+  noteInfo: NoteInfo;
+  isLight: boolean;
+  tags: string[];
+  allTags: string[];
+}) {
   const [show, setShow] = useState(false);
 
   const [selectedTag, setSelectedTag] = useState("Select a tag");
 
-  const [tags, setTags] = useState(["Tag1", "Tag2", "Tag3", "Tag4"]);
+  const [tags, setTags] = useState(props.tags);
+
+  const [nameInput, setNameInput] = useState(props.noteInfo.name);
+  const [contentInput, setContentInput] = useState(props.noteInfo.content);
 
   const [tagInput, setTagInput] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleApply = () => alert("Apply Changes");
+  const handleApply = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Edit Note");
+    handleClose();
+  };
 
   const handlerAddTag = (
     e: React.MouseEvent<HTMLButtonElement>,
-    existing?: boolean
+    existing: boolean
   ) => {
     e.preventDefault();
-    if (existing) {
-      if (tagInput !== "") {
+    if (!existing) {
+      if (tagInput !== "" && !props.allTags.includes(tagInput)) {
+        //props.setAllTags([...props.allTags, tagInput]);
         setTags([...tags, tagInput]);
       }
     } else {
-      if (selectedTag !== "Select a tag") {
+      if (selectedTag !== "Select a tag" && !tags.includes(selectedTag)) {
+        console.log(tags);
         setTags([...tags, selectedTag]);
       }
     }
@@ -47,7 +62,7 @@ function EditModal(props: { isLight: boolean }) {
 
       <Modal show={show} onHide={handleClose} animation={true} centered>
         <Modal.Body>
-          <form action="">
+          <form onSubmit={(e) => handleApply(e)}>
             <div className="flex flex-col gap-2 [&>span>label]:pb-1">
               <span className="flex flex-col">
                 <label htmlFor="title">Title:</label>
@@ -57,6 +72,8 @@ function EditModal(props: { isLight: boolean }) {
                   id="title"
                   className="border-2 p-1"
                   placeholder="Title here..."
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
                 />
               </span>
               <span className="flex flex-col">
@@ -68,6 +85,8 @@ function EditModal(props: { isLight: boolean }) {
                   rows={5}
                   className="border-2 p-1"
                   placeholder="Write something..."
+                  value={contentInput}
+                  onChange={(e) => setContentInput(e.target.value)}
                 ></textarea>
               </span>
               <span className="flex flex-col pb-3">
@@ -77,16 +96,12 @@ function EditModal(props: { isLight: boolean }) {
                     <input
                       type="text"
                       className="border-2 p-1 flex-1"
-                      placeholder="New Tag..."
+                      placeholder="Create a new Tag..."
                       value={tagInput}
-                      onChange={(e) => {
-                        setTagInput(e.target.value);
-                      }}
+                      onChange={(e) => setTagInput(e.target.value)}
                     />
                     <button
-                      onClick={(e) => {
-                        handlerAddTag(e);
-                      }}
+                      onClick={(e) => handlerAddTag(e, false)}
                       className={btnStyle}
                     >
                       Add
@@ -100,14 +115,14 @@ function EditModal(props: { isLight: boolean }) {
                       className="border-2 p-1 flex-1"
                       onChange={(e) => {
                         setSelectedTag(e.target.value);
-                        console.log(e.target.value);
                       }}
                     >
-                      {tags.map((tag, i) =>
+                      {props.allTags.map((tag, i) =>
                         i === 0 ? (
-                          <option key={i} value="Select a tag">
-                            Select a tag
-                          </option>
+                          <React.Fragment key={i}>
+                            <option value="Select a tag">Select a tag</option>
+                            <option value={tag}>{tag}</option>
+                          </React.Fragment>
                         ) : (
                           <option key={i} value={tag}>
                             {tag}
@@ -116,9 +131,7 @@ function EditModal(props: { isLight: boolean }) {
                       )}
                     </select>
                     <button
-                      onClick={(e) => {
-                        handlerAddTag(e, true);
-                      }}
+                      onClick={(e) => handlerAddTag(e, true)}
                       className={btnStyle}
                     >
                       Add
@@ -128,15 +141,15 @@ function EditModal(props: { isLight: boolean }) {
                 <TagContainer tags={tags} setTags={setTags} />
               </span>
             </div>
+            <section className="w-full flex gap-2 justify-end">
+              <button onClick={handleClose} className={btnStyle}>
+                Cancel
+              </button>
+              <button type="submit" className={btnStyle}>
+                Apply
+              </button>
+            </section>
           </form>
-          <section className="w-full flex gap-2 justify-end">
-            <button onClick={handleClose} className={btnStyle}>
-              Cancel
-            </button>
-            <button onClick={handleApply} className={btnStyle}>
-              Apply
-            </button>
-          </section>
         </Modal.Body>
       </Modal>
     </>

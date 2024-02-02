@@ -8,18 +8,45 @@ import Note from "./components/Note";
 import { NoteInfo } from "../types";
 import newNoteIconBlack from "./assets/newNoteIconBlack.svg";
 import newNoteIconWhite from "./assets/newNoteIconWhite.svg";
+import Filters from "./components/Filters";
+import axios from "axios";
 
 function App() {
   const [isLight, setIsLight] = useState(true);
 
-  const testInfo = {
-    name: "This is a Title",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, minima.",
-    tags: ["Tag 1", "Tag 2", "Tag 3"],
-  };
+  const [tags, setTags] = useState([]);
 
-  const [info, setInfo] = useState<NoteInfo>(testInfo);
+  const [notes, setNotes] = useState<NoteInfo[]>([]);
+
+  useEffect(() => {
+    const getAllNotes = () => {
+      axios
+        .get("http://localhost:3000/api/notes")
+        .then(function (response) {
+          setNotes(response.data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    };
+
+    getAllNotes();
+  }, []);
+
+  useEffect(() => {
+    const getAllTags = () => {
+      axios
+        .get("http://localhost:3000/api/tags")
+        .then(function (response) {
+          setTags(response.data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    };
+
+    getAllTags();
+  }, []);
 
   useEffect(() => {
     const themePreference = window.matchMedia("(prefers-color-scheme: light)");
@@ -28,9 +55,12 @@ function App() {
     }
   });
 
-  const notes = [];
-  for (let i = 0; i < 25; i++) {
-    notes.push(<Note key={i} info={info} isLight={isLight} />);
+  const notesToRender: any = [];
+  for (let i = 0; i < notes.length; i++) {
+    //TODO: Different Notes info
+    notesToRender.push(
+      <Note key={i} info={notes[i]} isLight={isLight} allTags={tags} />
+    );
   }
 
   return (
@@ -64,11 +94,11 @@ function App() {
               />
               New Note
             </button>
-            <span>Filter buttons</span>
+            <Filters tags={tags} setNotes={setNotes} />
           </article>
           {/*TODO: Adjust Grid */}
           <article className="px-16 py-8 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 grid-auto-flow-column gap-14">
-            {notes}
+            {notesToRender}
           </article>
         </section>
       </main>
