@@ -1,8 +1,8 @@
-import { NoteInfo } from "../../types";
+import { NoteInfo, Tag } from "../../types";
 import deleteIcon from "../assets/deleteIcon.svg";
 import EditModal from "./EditModal";
 
-function Note(props: { info: NoteInfo; isLight: boolean; allTags: string[] }) {
+function Note(props: { info: NoteInfo; isLight: boolean; allTags: Tag[] }) {
   const shortContent = props.info.content.slice(0, 150) + "...";
   const handleDelete = () => {
     console.log("Delete");

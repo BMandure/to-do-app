@@ -55,14 +55,6 @@ function App() {
     }
   });
 
-  const notesToRender: any = [];
-  for (let i = 0; i < notes.length; i++) {
-    //TODO: Different Notes info
-    notesToRender.push(
-      <Note key={i} info={notes[i]} isLight={isLight} allTags={tags} />
-    );
-  }
-
   return (
     <>
       <header
@@ -98,7 +90,13 @@ function App() {
           </article>
           {/*TODO: Adjust Grid */}
           <article className="px-16 py-8 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 grid-auto-flow-column gap-14">
-            {notesToRender}
+            {notes ? (
+              notes.map((note, i) => (
+                <Note key={i} info={note} isLight={isLight} allTags={tags} />
+              ))
+            ) : (
+              <h1>Loading or nothing</h1>
+            )}
           </article>
         </section>
       </main>

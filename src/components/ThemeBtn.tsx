@@ -8,7 +8,6 @@ function ThemeBtn(props: {
 }) {
   const handlerOnThemeChange = () => {
     props.setIsLight(!props.isLight);
-    console.log("Theme Changed");
   };
 
   return (

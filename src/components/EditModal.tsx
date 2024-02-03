@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { NoteInfo } from "../../types";
+import { NoteInfo, Tag } from "../../types";
 import Modal from "react-bootstrap/Modal";
 import editIcon from "../assets/editIcon.svg";
-import TagContainer from "./TagContainer";
 
 function EditModal(props: {
   noteInfo: NoteInfo;
   isLight: boolean;
   tags: string[];
-  allTags: string[];
+  allTags: any[];
 }) {
+  console.log(props.tags);
+  console.log(props.allTags);
+
   const [show, setShow] = useState(false);
 
   const [selectedTag, setSelectedTag] = useState("Select a tag");
-
-  const [tags, setTags] = useState(props.tags);
 
   const [nameInput, setNameInput] = useState(props.noteInfo.name);
   const [contentInput, setContentInput] = useState(props.noteInfo.content);
@@ -35,17 +35,7 @@ function EditModal(props: {
     existing: boolean
   ) => {
     e.preventDefault();
-    if (!existing) {
-      if (tagInput !== "" && !props.allTags.includes(tagInput)) {
-        //props.setAllTags([...props.allTags, tagInput]);
-        setTags([...tags, tagInput]);
-      }
-    } else {
-      if (selectedTag !== "Select a tag" && !tags.includes(selectedTag)) {
-        console.log(tags);
-        setTags([...tags, selectedTag]);
-      }
-    }
+    console.log(existing, "Add Tag");
   };
 
   const btnStyle = `flex gap-3 items-center ${
@@ -121,11 +111,11 @@ function EditModal(props: {
                         i === 0 ? (
                           <React.Fragment key={i}>
                             <option value="Select a tag">Select a tag</option>
-                            <option value={tag}>{tag}</option>
+                            <option value={tag._id}>{tag.name}</option>
                           </React.Fragment>
                         ) : (
-                          <option key={i} value={tag}>
-                            {tag}
+                          <option key={i} value={tag._id}>
+                            {tag.name}
                           </option>
                         )
                       )}
@@ -138,7 +128,6 @@ function EditModal(props: {
                     </button>
                   </span>
                 </div>
-                <TagContainer tags={tags} setTags={setTags} />
               </span>
             </div>
             <section className="w-full flex gap-2 justify-end">

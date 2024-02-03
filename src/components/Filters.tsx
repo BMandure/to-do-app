@@ -1,48 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { NoteInfo, Tag } from "../../types";
+import { NoteInfo } from "../../types";
 import axios from "axios";
 
 function Filters(props: {
-  tags: Tag[];
+  tags: any[];
   setNotes: React.Dispatch<React.SetStateAction<NoteInfo[]>>;
 }) {
-  const [selectedTag, setSelectedTag] = useState("0");
-
+  const [tagId, setTagId] = useState("");
   const handlerChangeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTag(e.target.value);
+    setTagId(e.target.value);
   };
 
   useEffect(() => {
     const getFilteredNotes = () => {
       axios
-        .get(`http://localhost:3000/api/notes/${selectedTag}`)
+        .get(`http://localhost:3000/api/notes/${tagId}`)
         .then((response) => {
           props.setNotes(response.data);
         })
-        .catch();
+        .catch(() => console.log("No tag fetched"));
     };
     getFilteredNotes();
-  }, [selectedTag]);
+  }, [tagId]);
 
   return (
     <div className="flex items-center gap-3 [&>select]:text-black">
       <span>Filters:</span>
       <select
         className="min-w-[150px] border-2 p-1"
-        value={selectedTag}
+        value={tagId}
         onChange={(e) => handlerChangeFilter(e)}
       >
-        {props.tags.map((tag, i) =>
-          i === 0 ? (
-            <React.Fragment key={i}>
-              <option value="0">All</option>
-              <option value={tag.id}>{tag.name}</option>
-            </React.Fragment>
-          ) : (
-            <option key={i} value={tag.id}>
-              {tag.name}
-            </option>
+        {props.tags.length > 0 ? (
+          props.tags.map((tag, i) =>
+            i === 0 ? (
+              <React.Fragment key={i}>
+                <option value="noTag">All</option>
+                <option value={tag._id}>{tag.name}</option>
+              </React.Fragment>
+            ) : (
+              <option key={i} value={tag._id}>
+                {tag.name}
+              </option>
+            )
           )
+        ) : (
+          <option disabled>No Tags</option>
         )}
       </select>
     </div>

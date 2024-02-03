@@ -1,7 +1,8 @@
+import { Tag } from "../../types";
 import Tag from "./Tag";
 
 function TagContainer(props: {
-  tags: string[];
+  tags: Tag[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   return (
