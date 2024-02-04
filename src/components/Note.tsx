@@ -2,7 +2,13 @@ import { NoteInfo, Tag } from "../../types";
 import deleteIcon from "../assets/deleteIcon.svg";
 import EditModal from "./EditModal";
 
-function Note(props: { info: NoteInfo; isLight: boolean; allTags: Tag[] }) {
+function Note(props: {
+  info: NoteInfo;
+  isLight: boolean;
+  allTags: Tag[];
+  render: boolean;
+  setRender: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const shortContent = props.info.content.slice(0, 150) + "...";
   const handleDelete = () => {
     console.log("Delete");
@@ -20,6 +26,8 @@ function Note(props: { info: NoteInfo; isLight: boolean; allTags: Tag[] }) {
           isLight={props.isLight}
           tags={props.info.tags}
           allTags={props.allTags}
+          render={props.render}
+          setRender={props.setRender}
         />
         <button onClick={() => handleDelete()}>
           <img

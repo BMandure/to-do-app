@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { NoteInfo, Tag } from "../../types";
 import Modal from "react-bootstrap/Modal";
 import editIcon from "../assets/editIcon.svg";
+import axios from "axios";
 
 function EditModal(props: {
   noteInfo: NoteInfo;
   isLight: boolean;
   tags: string[];
   allTags: any[];
+  render: boolean;
+  setRender: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  console.log(props.tags);
-  console.log(props.allTags);
-
   const [show, setShow] = useState(false);
 
   const [selectedTag, setSelectedTag] = useState("Select a tag");
@@ -24,9 +24,39 @@ function EditModal(props: {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const setNewNote = (newNote: {
+    name: string;
+    content: string;
+    tags: string[];
+  }) => {
+    console.log(props.noteInfo._id);
+    axios({
+      method: "patch",
+      url: `http://localhost:3000/api/notes/${props.noteInfo._id}`,
+      data: {
+        name: newNote.name,
+        content: newNote.content,
+        tags: newNote.tags,
+      },
+    })
+      .then((response) => {
+        response.status !== 404 && props.setRender(!props.render);
+      })
+      .catch((error) => {
+        console.error("Error fetching notes:", error);
+      });
+  };
+
   const handleApply = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Edit Note");
+    const patchNote = {
+      name: nameInput,
+      content: contentInput,
+      tags: props.tags,
+    };
+
+    setNewNote(patchNote);
+    props.setRender(!props.render);
     handleClose();
   };
 
@@ -35,7 +65,7 @@ function EditModal(props: {
     existing: boolean
   ) => {
     e.preventDefault();
-    console.log(existing, "Add Tag");
+    console.log(existing);
   };
 
   const btnStyle = `flex gap-3 items-center ${
@@ -85,6 +115,8 @@ function EditModal(props: {
                   <span className="flex gap-2">
                     <input
                       type="text"
+                      name="tags"
+                      id="tags"
                       className="border-2 p-1 flex-1"
                       placeholder="Create a new Tag..."
                       value={tagInput}

@@ -18,6 +18,8 @@ function App() {
 
   const [notes, setNotes] = useState<NoteInfo[]>([]);
 
+  const [render, setRender] = useState(false);
+
   useEffect(() => {
     const getAllNotes = () => {
       axios
@@ -31,7 +33,7 @@ function App() {
     };
 
     getAllNotes();
-  }, []);
+  }, [render]);
 
   useEffect(() => {
     const getAllTags = () => {
@@ -92,7 +94,14 @@ function App() {
           <article className="px-16 py-8 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 grid-auto-flow-column gap-14">
             {notes ? (
               notes.map((note, i) => (
-                <Note key={i} info={note} isLight={isLight} allTags={tags} />
+                <Note
+                  key={i}
+                  info={note}
+                  isLight={isLight}
+                  allTags={tags}
+                  render={render}
+                  setRender={setRender}
+                />
               ))
             ) : (
               <h1>Loading or nothing</h1>
