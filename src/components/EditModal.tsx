@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NoteInfo, Tag } from "../../types";
+import { NoteInfo } from "../../types";
 import Modal from "react-bootstrap/Modal";
 import editIcon from "../assets/editIcon.svg";
 import axios from "axios";
@@ -29,7 +29,7 @@ function EditModal(props: {
     content: string;
     tags: string[];
   }) => {
-    console.log(props.noteInfo._id);
+    //TODO: MODIFY TAGS TOO
     axios({
       method: "patch",
       url: `http://localhost:3000/api/notes/${props.noteInfo._id}`,
