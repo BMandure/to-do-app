@@ -35,7 +35,7 @@ function Filters(props: {
           props.tags.map((tag, i) =>
             i === 0 ? (
               <React.Fragment key={i}>
-                <option value="noTag">All</option>
+                <option value="">All</option>
                 <option value={tag._id}>{tag.name}</option>
               </React.Fragment>
             ) : (

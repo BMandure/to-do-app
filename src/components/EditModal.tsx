@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { NoteInfo } from "../../types";
+import React, { useEffect, useState } from "react";
+import { NoteInfo, Tag } from "../../types";
 import Modal from "react-bootstrap/Modal";
 import editIcon from "../assets/editIcon.svg";
 import axios from "axios";
+import TagContainer from "./TagContainer";
 
 function EditModal(props: {
   noteInfo: NoteInfo;
   isLight: boolean;
-  tags: string[];
   allTags: any[];
   render: boolean;
   setRender: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,6 +16,8 @@ function EditModal(props: {
 
   const [selectedTag, setSelectedTag] = useState("Select a tag");
 
+  const [noteTags, setNoteTags] = useState<Tag[] | []>([]);
+
   const [nameInput, setNameInput] = useState(props.noteInfo.name);
   const [contentInput, setContentInput] = useState(props.noteInfo.content);
 
@@ -23,6 +25,20 @@ function EditModal(props: {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    const getNoteTags = (noteId: string) => {
+      axios
+        .get(`http://localhost:3000/api/notes/${noteId}`)
+        .then(function (response) {
+          setNoteTags(response.data.tags);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    };
+    getNoteTags(props.noteInfo._id);
+  }, []);
 
   const setNewNote = (newNote: {
     name: string;
@@ -52,7 +68,7 @@ function EditModal(props: {
     const patchNote = {
       name: nameInput,
       content: contentInput,
-      tags: props.tags,
+      tags: [],
     };
 
     setNewNote(patchNote);
@@ -159,6 +175,7 @@ function EditModal(props: {
                       Add
                     </button>
                   </span>
+                  <TagContainer noteTags={noteTags} setTags={setNoteTags} />
                 </div>
               </span>
             </div>

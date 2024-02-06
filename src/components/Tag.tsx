@@ -1,18 +1,25 @@
+import { useEffect } from "react";
+import { Tag as TagType } from "../../types";
+
 function Tag(props: {
-  text: string;
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
-  tags: string[];
+  tagInfo: TagType;
+  setTags: React.Dispatch<React.SetStateAction<TagType[]>>;
+  noteTags: TagType[];
 }) {
+  useEffect(() => {}, []);
   const handlerOnDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const removeTag = () => props.tags.filter((tag) => tag !== props.text);
+    const removeTag = () => {
+      return props.noteTags.filter((tag) => tag.id !== props.tagInfo.id);
+    };
 
     props.setTags(removeTag());
   };
   return (
     <span className="px-2 py-1 border-2 flex justify-between">
-      {props.text} <button onClick={(e) => handlerOnDelete(e)}>X</button>
+      {props.tagInfo.name}{" "}
+      <button onClick={(e) => handlerOnDelete(e)}>X</button>
     </span>
   );
 }

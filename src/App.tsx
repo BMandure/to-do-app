@@ -79,18 +79,17 @@ function App() {
                 isLight
                   ? "border text-white border-white bg-zinc-800"
                   : "border text-black border-black bg-[#F5F5F5]"
-              } p-3 rounded-full`}
+              } px-3 py-2 rounded-full`}
             >
               <img
                 src={isLight ? newNoteIconWhite : newNoteIconBlack}
                 alt="Delete Note"
                 className="h-[25px] w-[25px]"
               />
-              New Note
+              <span>New Note</span>
             </button>
             <Filters tags={tags} setNotes={setNotes} />
           </article>
-          {/*TODO: Adjust Grid */}
           <article className="px-16 py-8 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 grid-auto-flow-column gap-14">
             {notes ? (
               notes.map((note, i) => (

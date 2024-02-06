@@ -24,7 +24,6 @@ function Note(props: {
         <EditModal
           noteInfo={props.info}
           isLight={props.isLight}
-          tags={props.info.tags}
           allTags={props.allTags}
           render={props.render}
           setRender={props.setRender}
